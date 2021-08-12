@@ -27,6 +27,7 @@ import (
 	backendPg "github.com/hashicorp/terraform/internal/backend/remote-state/pg"
 	backendS3 "github.com/hashicorp/terraform/internal/backend/remote-state/s3"
 	backendSwift "github.com/hashicorp/terraform/internal/backend/remote-state/swift"
+	backendCloud "github.com/hashicorp/terraform/internal/cloud"
 )
 
 // backends is the list of available backends. This is a global variable
@@ -52,6 +53,10 @@ func Init(services *disco.Disco) {
 		// Enhanced backends.
 		"local":  func() backend.Backend { return backendLocal.New() },
 		"remote": func() backend.Backend { return backendRemote.New(services) },
+
+		// TEMPORARY: The 'cloud' backend will be used as an implementation detail only and
+		// later not be registered as a typical backend here.
+		"cloud": func() backend.Backend { return backendCloud.New(services) },
 
 		// Remote State backends.
 		"artifactory": func() backend.Backend { return backendArtifactory.New() },
