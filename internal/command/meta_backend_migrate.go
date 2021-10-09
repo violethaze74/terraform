@@ -44,7 +44,7 @@ type backendMigrateOpts struct {
 //
 // This will attempt to lock both states for the migration.
 func (m *Meta) backendMigrateState(opts *backendMigrateOpts) error {
-	log.Printf("[TRACE] backendMigrateState: need to migrate from %q to %q backend config", opts.SourceType, opts.DestinationType)
+	log.Printf("[INFO] backendMigrateState: need to migrate from %q to %q backend config", opts.SourceType, opts.DestinationType)
 	// We need to check what the named state status is. If we're converting
 	// from multi-state to single-state for example, we need to handle that.
 	var sourceSingleState, destinationSingleState, sourceTFC, destinationTFC bool
@@ -141,7 +141,7 @@ func (m *Meta) backendMigrateState(opts *backendMigrateOpts) error {
 
 // Multi-state to multi-state.
 func (m *Meta) backendMigrateState_S_S(opts *backendMigrateOpts) error {
-	log.Print("[TRACE] backendMigrateState: migrating all named workspaces")
+	log.Print("[INFO] backendMigrateState: migrating all named workspaces")
 
 	migrate := opts.force
 	if !migrate {
@@ -196,9 +196,9 @@ func (m *Meta) backendMigrateState_S_S(opts *backendMigrateOpts) error {
 
 // Multi-state to single state.
 func (m *Meta) backendMigrateState_S_s(opts *backendMigrateOpts) error {
-	log.Printf("[TRACE] backendMigrateState: destination backend type %q does not support named workspaces", opts.DestinationType)
+	log.Printf("[INFO] backendMigrateState: destination backend type %q does not support named workspaces", opts.DestinationType)
 
-	currentEnv, err := m.Workspace()
+	currentWorkspace, err := m.Workspace()
 	if err != nil {
 		return err
 	}
@@ -215,7 +215,7 @@ func (m *Meta) backendMigrateState_S_s(opts *backendMigrateOpts) error {
 				opts.DestinationType),
 			Description: fmt.Sprintf(
 				strings.TrimSpace(inputBackendMigrateMultiToSingle),
-				opts.SourceType, opts.DestinationType, currentEnv),
+				opts.SourceType, opts.DestinationType, currentWorkspace),
 		})
 		if err != nil {
 			return fmt.Errorf(
@@ -228,7 +228,7 @@ func (m *Meta) backendMigrateState_S_s(opts *backendMigrateOpts) error {
 	}
 
 	// Copy the default state
-	opts.sourceWorkspace = currentEnv
+	opts.sourceWorkspace = currentWorkspace
 
 	// now switch back to the default env so we can acccess the new backend
 	m.SetWorkspace(backend.DefaultStateName)
@@ -238,7 +238,7 @@ func (m *Meta) backendMigrateState_S_s(opts *backendMigrateOpts) error {
 
 // Single state to single state, assumed default state name.
 func (m *Meta) backendMigrateState_s_s(opts *backendMigrateOpts) error {
-	log.Printf("[TRACE] backendMigrateState: migrating %q workspace to %q workspace", opts.sourceWorkspace, opts.destinationWorkspace)
+	log.Printf("[INFO] backendMigrateState: single-to-single migrating %q workspace to %q workspace", opts.sourceWorkspace, opts.destinationWorkspace)
 
 	sourceState, err := opts.Source.StateMgr(opts.sourceWorkspace)
 	if err != nil {
@@ -521,7 +521,7 @@ func (m *Meta) backendMigrateTFC(opts *backendMigrateOpts) error {
 	// Everything below, by the above two conditionals, now assumes that the
 	// destination is always Terraform Cloud (TFC).
 
-	sourceSingle := sourceSingleState || (len(sourceWorkspaces) == 1 && sourceWorkspaces[0] == backend.DefaultStateName)
+	sourceSingle := sourceSingleState || (len(sourceWorkspaces) == 1)
 	if sourceSingle {
 		if cloudBackendDestination.WorkspaceMapping.Strategy() == cloud.WorkspaceNameStrategy {
 			// If we know the name via WorkspaceNameStrategy, then set the
@@ -530,6 +530,14 @@ func (m *Meta) backendMigrateTFC(opts *backendMigrateOpts) error {
 			// in TFC if it does not exist.
 			opts.destinationWorkspace = cloudBackendDestination.WorkspaceMapping.Name
 		}
+
+		currentWorkspace, err := m.Workspace()
+		if err != nil {
+			return err
+		}
+		opts.sourceWorkspace = currentWorkspace
+
+		log.Printf("[INFO] backendMigrateTFC: single-to-single migration from source %s to destination %q", opts.sourceWorkspace, opts.destinationWorkspace)
 		// Run normal single-to-single state migration
 		// This will handle both situations where the new cloud backend
 		// configuration is using a workspace.name strategy or workspace.tags
@@ -546,13 +554,14 @@ func (m *Meta) backendMigrateTFC(opts *backendMigrateOpts) error {
 			return err
 		}
 
-		currentEnv, err := m.Workspace()
+		currentWorkspace, err := m.Workspace()
 		if err != nil {
 			return err
 		}
 
-		opts.sourceWorkspace = currentEnv
+		opts.sourceWorkspace = currentWorkspace
 		opts.destinationWorkspace = cloudBackendDestination.WorkspaceMapping.Name
+		log.Printf("[INFO] backendMigrateTFC: multi-to-single migration from source %s to destination %q", opts.sourceWorkspace, opts.destinationWorkspace)
 
 		return m.backendMigrateState_s_s(opts)
 	}
@@ -561,9 +570,13 @@ func (m *Meta) backendMigrateTFC(opts *backendMigrateOpts) error {
 	// workspace over to new one, prompt for workspace name pattern (*),
 	// and start migrating, and create tags for each workspace.
 	if multiSource && destinationTagsStrategy {
+		log.Printf("[INFO] backendMigrateTFC: multi-to-multi migration from source workspaces %q", sourceWorkspaces)
 		return m.backendMigrateState_S_TFC(opts, sourceWorkspaces)
 	}
 
+	// TODO(omar): after the check for sourceSingle is done, everything following
+	// it has to be multi. So rework the code to not need to check for multi, adn
+	// return m.backendMigrateState_S_TFC here.
 	return nil
 }
 
@@ -606,6 +619,7 @@ func (m *Meta) backendMigrateState_S_TFC(opts *backendMigrateOpts, sourceWorkspa
 		opts.force = true
 
 		// Perform the migration
+		log.Printf("[INFO] backendMigrateTFC: multi-to-multi migration, source workspace %q to destination workspace %q", opts.sourceWorkspace, opts.destinationWorkspace)
 		if err := m.backendMigrateState_s_s(opts); err != nil {
 			return fmt.Errorf(strings.TrimSpace(
 				errMigrateMulti), name, opts.SourceType, opts.DestinationType, err)
