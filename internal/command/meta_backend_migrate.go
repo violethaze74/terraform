@@ -564,10 +564,6 @@ func (m *Meta) backendMigrateTFC(opts *backendMigrateOpts) error {
 
 	multiSource := !sourceSingleState && len(sourceWorkspaces) > 1
 	if multiSource && destinationNameStrategy {
-		if err := m.promptMultiToSingleCloudMigration(opts); err != nil {
-			return err
-		}
-
 		currentWorkspace, err := m.Workspace()
 		if err != nil {
 			return err
@@ -575,6 +571,10 @@ func (m *Meta) backendMigrateTFC(opts *backendMigrateOpts) error {
 
 		opts.sourceWorkspace = currentWorkspace
 		opts.destinationWorkspace = cloudBackendDestination.WorkspaceMapping.Name
+		if err := m.promptMultiToSingleCloudMigration(opts); err != nil {
+			return err
+		}
+
 		log.Printf("[INFO] backendMigrateTFC: multi-to-single migration from source %s to destination %q", opts.sourceWorkspace, opts.destinationWorkspace)
 
 		return m.backendMigrateState_s_s(opts)
@@ -657,9 +657,11 @@ func (m *Meta) promptMultiToSingleCloudMigration(opts *backendMigrateOpts) error
 		var err error
 		// Ask the user if they want to migrate their existing remote state
 		migrate, err = m.confirm(&terraform.InputOpts{
-			Id:          "backend-migrate-multistate-to-single",
-			Query:       "Do you want to copy only your current workspace?",
-			Description: strings.TrimSpace(tfcInputBackendMigrateMultiToSingle),
+			Id:    "backend-migrate-multistate-to-single",
+			Query: "Do you want to copy only your current workspace?",
+			Description: fmt.Sprintf(
+				strings.TrimSpace(tfcInputBackendMigrateMultiToSingle),
+				opts.SourceType, opts.destinationWorkspace),
 		})
 		if err != nil {
 			return fmt.Errorf("Error asking for state migration action: %s", err)
@@ -807,8 +809,11 @@ For more information on workspace naming, see https://www.terraform.io/docs/clou
 `
 
 const tfcInputBackendMigrateMultiToSingle = `
-The cloud configuration has one workspace declared, and you are attemtping to migrate multiple workspaces
-to a single workspace. By continuing, you will only migrate your current workspace.
+The previous backend %[1]q has multiple workspaces, but Terraform Cloud has been
+configured to use a single workspace (%[2]q). By continuing, you will only
+migrate your current workspace. If you wish to migrate all workspaces from the
+previous backend, use the 'tags' strategy in your workspace configuration block
+instead.
 `
 
 const inputBackendMigrateEmpty = `
