@@ -2,6 +2,7 @@ package command
 
 import (
 	"bytes"
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -95,6 +96,57 @@ func TestStateReplaceProvider(t *testing.T) {
 			t.Fatalf("unexpected backups: %#v", backups)
 		}
 		testStateOutput(t, backups[0], testStateReplaceProviderOutputOriginal)
+	})
+
+	t.Run("backup flag with non-local backend", func(t *testing.T) {
+		td := tempDir(t)
+		testCopyDir(t, testFixturePath("init-backend-http"), td)
+		defer os.RemoveAll(td)
+		defer testChdir(t, td)()
+
+		backupPath := filepath.Join(td, "backup")
+
+		// Set up our backend state using the mock state we build above
+		// Get http backend running
+		// These calls together are == initializing the backend
+		dataState, srv := testBackendState(t, state, 200)
+		defer srv.Close()
+		testStateFileRemote(t, dataState)
+
+		ui := new(cli.MockUi)
+		view, _ := testView(t)
+		c := &StateReplaceProviderCommand{
+			StateMeta{
+				Meta: Meta{
+					Ui:   ui,
+					View: view,
+				},
+			},
+		}
+
+		inputBuf := &bytes.Buffer{}
+		ui.InputReader = inputBuf
+		inputBuf.WriteString("yes\n")
+
+		args := []string{
+			"-backup", backupPath,
+			"hashicorp/aws",
+			"acmecorp/aws",
+		}
+		if code := c.Run(args); code == 0 {
+			t.Fatalf("expected error output, got:\n%s", ui.OutputWriter.String())
+		}
+
+		gotErr := ui.ErrorWriter.String()
+		wantErr := `
+Error: oh no
+
+description: oh no
+
+`
+		if gotErr != wantErr {
+			t.Fatalf("expected error\ngot:\n%s\n\nwant:%s", gotErr, wantErr)
+		}
 	})
 
 	t.Run("auto approve", func(t *testing.T) {
