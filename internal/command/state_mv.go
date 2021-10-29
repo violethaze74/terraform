@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/hashicorp/terraform/internal/addrs"
+	"github.com/hashicorp/terraform/internal/backend"
 	"github.com/hashicorp/terraform/internal/command/arguments"
 	"github.com/hashicorp/terraform/internal/command/clistate"
 	"github.com/hashicorp/terraform/internal/command/views"
@@ -40,6 +41,30 @@ func (c *StateMvCommand) Run(args []string) int {
 	if len(args) != 2 {
 		c.Ui.Error("Exactly two arguments expected.\n")
 		return cli.RunResultHelp
+	}
+
+	// If backup flag is set, make sure the backend is local
+	if c.backupPath != "-" {
+		// backend could be nil, need to handle that case
+		// what to do if backend is nil?
+		currentBackend, diags := c.backendFromConfig(&BackendOpts{})
+		if diags.HasErrors() {
+			c.showDiagnostics(diags)
+			return 1
+		}
+
+		_, isLocalBackend := currentBackend.(backend.Local)
+		if currentBackend != nil && !isLocalBackend {
+			diags = diags.Append(
+				tfdiags.Sourceless(
+					tfdiags.Error,
+					"oh no",
+					"description: oh no",
+				),
+			)
+			c.showDiagnostics(diags)
+			return 1
+		}
 	}
 
 	// Read the from state
