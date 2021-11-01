@@ -79,6 +79,72 @@ func TestStateRm(t *testing.T) {
 	testStateOutput(t, backups[0], testStateRmOutputOriginal)
 }
 
+func TestStateRm_backupFlagWithNonLocalBackend(t *testing.T) {
+	td := tempDir(t)
+	testCopyDir(t, testFixturePath("init-backend-http"), td)
+	defer os.RemoveAll(td)
+	defer testChdir(t, td)()
+
+	backupPath := filepath.Join(td, "backup")
+
+	state := states.BuildState(func(s *states.SyncState) {
+		s.SetResourceInstanceCurrent(
+			addrs.Resource{
+				Mode: addrs.ManagedResourceMode,
+				Type: "test_instance",
+				Name: "foo",
+			}.Instance(addrs.NoKey).Absolute(addrs.RootModuleInstance),
+			&states.ResourceInstanceObjectSrc{
+				AttrsJSON: []byte(`{"id":"bar","foo":"value","bar":"value"}`),
+				Status:    states.ObjectReady,
+			},
+			addrs.AbsProviderConfig{
+				Provider: addrs.NewDefaultProvider("test"),
+				Module:   addrs.RootModule,
+			},
+		)
+	})
+
+	// Set up our backend state using the mock state we build above
+	// Get http backend running
+	// These calls together are == initializing the backend
+	dataState, srv := testBackendState(t, state, 200)
+	defer srv.Close()
+	testStateFileRemote(t, dataState)
+
+	p := testProvider()
+	ui := new(cli.MockUi)
+	view, _ := testView(t)
+	c := &StateRmCommand{
+		StateMeta{
+			Meta: Meta{
+				testingOverrides: metaOverridesForProvider(p),
+				Ui:               ui,
+				View:             view,
+			},
+		},
+	}
+
+	args := []string{
+		"-backup", backupPath,
+		"test_instance.foo",
+	}
+	if code := c.Run(args); code == 0 {
+		t.Fatalf("expected error output, got:\n%s", ui.OutputWriter.String())
+	}
+
+	gotErr := ui.ErrorWriter.String()
+	wantErr := `
+Error: oh no
+
+description: oh no
+
+`
+	if gotErr != wantErr {
+		t.Fatalf("expected error\ngot:\n%s\n\nwant:%s", gotErr, wantErr)
+	}
+}
+
 func TestStateRmNotChildModule(t *testing.T) {
 	state := states.BuildState(func(s *states.SyncState) {
 		s.SetResourceInstanceCurrent(
