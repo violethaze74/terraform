@@ -214,15 +214,14 @@ func Test_migrate_tfc_to_tfc_single_workspace(t *testing.T) {
 				},
 			},
 			validations: func(t *testing.T, orgName string) {
-				wsList, err := tfeClient.Workspaces.List(ctx, orgName, tfe.WorkspaceListOptions{
-					Tags: tfe.String("app"),
-				})
+				// We created the workspace, so it will be there. We could not complete the state migration,
+				// though, so the workspace should be empty.
+				ws, err := tfeClient.Workspaces.ReadWithOptions(ctx, orgName, "new-workspace", &tfe.WorkspaceReadOptions{Include: "current_run"})
 				if err != nil {
 					t.Fatal(err)
 				}
-				// The migration never occured, so we have no workspaces with this tag.
-				if len(wsList.Items) != 0 {
-					t.Fatalf("Expected number of workspaces to be 0, but got %d", len(wsList.Items))
+				if ws.CurrentRun != nil {
+					t.Fatal("Expected to workspace be empty")
 				}
 			},
 		},
@@ -462,8 +461,7 @@ func Test_migrate_tfc_to_tfc_multiple_workspace(t *testing.T) {
 							expectedCmdOutput: `Would you like to rename your workspaces?`,
 							userInput:         []string{"1", "new-*", "1"},
 							postInputOutput: []string{
-								`What pattern would you like to add to all your workspaces?`,
-								`The currently selected workspace (app-staging) does not exist.`,
+								`How would you like to rename your workspaces?`,
 								`Terraform Cloud has been successfully initialized!`},
 						},
 					},

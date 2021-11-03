@@ -311,20 +311,11 @@ func Test_migrate_multi_to_tfc_cloud_tags_strategy(t *testing.T) {
 						{
 							command:           []string{"init", "-migrate-state"},
 							expectedCmdOutput: `Terraform Cloud requires all workspaces to be given an explicit name.`,
-							userInput:         []string{"dev", "1", "app-*", "1"},
+							userInput:         []string{"dev", "1", "app-*"},
 							postInputOutput: []string{
 								`Would you like to rename your workspaces?`,
-								"What pattern would you like to add to all your workspaces?",
-								"The currently selected workspace (prod) does not exist.",
+								"How would you like to rename your workspaces?",
 								"Terraform Cloud has been successfully initialized!"},
-						},
-						{
-							command:           []string{"workspace", "select", "app-prod"},
-							expectedCmdOutput: `Switched to workspace "app-prod".`,
-						},
-						{
-							command:           []string{"output"},
-							expectedCmdOutput: `val = "prod"`,
 						},
 						{
 							command:           []string{"workspace", "select", "app-dev"},
@@ -333,6 +324,14 @@ func Test_migrate_multi_to_tfc_cloud_tags_strategy(t *testing.T) {
 						{
 							command:           []string{"output"},
 							expectedCmdOutput: `val = "default"`,
+						},
+						{
+							command:           []string{"workspace", "select", "app-prod"},
+							expectedCmdOutput: `Switched to workspace "app-prod".`,
+						},
+						{
+							command:           []string{"output"},
+							expectedCmdOutput: `val = "prod"`,
 						},
 					},
 				},
@@ -417,16 +416,11 @@ func Test_migrate_multi_to_tfc_cloud_tags_strategy(t *testing.T) {
 						{
 							command:           []string{"init", "-migrate-state"},
 							expectedCmdOutput: `Terraform Cloud requires all workspaces to be given an explicit name.`,
-							userInput:         []string{"dev", "1", "app-*", "1"},
+							userInput:         []string{"dev", "1", "app-*"},
 							postInputOutput: []string{
 								`Would you like to rename your workspaces?`,
-								"What pattern would you like to add to all your workspaces?",
-								"The currently selected workspace (default) does not exist.",
+								"How would you like to rename your workspaces?",
 								"Terraform Cloud has been successfully initialized!"},
-						},
-						{
-							command:           []string{"workspace", "select", "app-dev"},
-							expectedCmdOutput: `Switched to workspace "app-dev".`,
 						},
 						{
 							command:           []string{"workspace", "select", "app-billing"},
@@ -435,6 +429,10 @@ func Test_migrate_multi_to_tfc_cloud_tags_strategy(t *testing.T) {
 						{
 							command:           []string{"workspace", "select", "app-identity"},
 							expectedCmdOutput: `Switched to workspace "app-identity".`,
+						},
+						{
+							command:           []string{"workspace", "select", "app-dev"},
+							expectedCmdOutput: `Switched to workspace "app-dev".`,
 						},
 					},
 				},
