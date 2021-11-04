@@ -129,7 +129,7 @@ func Test_migrate_remote_backend_name_to_tfc_name(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
-			exp, err := expect.NewConsole(expect.WithStdout(os.Stdout), expect.WithDefaultTimeout(expectConsoleTimeout))
+			exp, err := expect.NewConsole(defaultOpts()...)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -265,7 +265,7 @@ func Test_migrate_remote_backend_name_to_tfc_name_different_org(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
-			exp, err := expect.NewConsole(expect.WithStdout(os.Stdout), expect.WithDefaultTimeout(expectConsoleTimeout))
+			exp, err := expect.NewConsole(defaultOpts()...)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -417,7 +417,7 @@ func Test_migrate_remote_backend_name_to_tfc_tags(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
-			exp, err := expect.NewConsole(expect.WithStdout(os.Stdout), expect.WithDefaultTimeout(expectConsoleTimeout))
+			exp, err := expect.NewConsole(defaultOpts()...)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -639,7 +639,7 @@ func Test_migrate_remote_backend_prefix_to_tfc_name(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
-			exp, err := expect.NewConsole(expect.WithStdout(os.Stdout), expect.WithDefaultTimeout(expectConsoleTimeout))
+			exp, err := expect.NewConsole(defaultOpts()...)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -863,7 +863,7 @@ func Test_migrate_remote_backend_prefix_to_tfc_tags(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
-			exp, err := expect.NewConsole(expect.WithStdout(os.Stdout), expect.WithDefaultTimeout(expectConsoleTimeout))
+			exp, err := expect.NewConsole(defaultOpts()...)
 			if err != nil {
 				t.Fatal(err)
 			}

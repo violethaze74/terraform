@@ -44,7 +44,7 @@ func Test_init_with_empty_tags(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			organization, cleanup := createOrganization(t)
 			defer cleanup()
-			exp, err := expect.NewConsole(expect.WithStdout(os.Stdout), expect.WithDefaultTimeout(expectConsoleTimeout))
+			exp, err := expect.NewConsole(defaultOpts()...)
 			if err != nil {
 				t.Fatal(err)
 			}

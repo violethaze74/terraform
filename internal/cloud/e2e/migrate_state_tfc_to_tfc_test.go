@@ -229,7 +229,7 @@ func Test_migrate_tfc_to_tfc_single_workspace(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
-			exp, err := expect.NewConsole(expect.WithStdout(os.Stdout), expect.WithDefaultTimeout(expectConsoleTimeout))
+			exp, err := expect.NewConsole(defaultOpts()...)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -492,7 +492,7 @@ func Test_migrate_tfc_to_tfc_multiple_workspace(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
-			exp, err := expect.NewConsole(expect.WithStdout(os.Stdout), expect.WithDefaultTimeout(expectConsoleTimeout))
+			exp, err := expect.NewConsole(defaultOpts()...)
 			if err != nil {
 				t.Fatal(err)
 			}
