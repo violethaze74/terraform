@@ -50,10 +50,8 @@ func Test_backend_apply_before_init(t *testing.T) {
 							expectedCmdOutput: `Successfully configured the backend "local"!`,
 						},
 						{
-							command:           []string{"apply"},
-							expectedCmdOutput: `Do you want to perform these actions?`,
-							userInput:         []string{"yes"},
-							postInputOutput:   []string{`Apply complete!`},
+							command:         []string{"apply", "-auto-approve"},
+							postInputOutput: []string{`Apply complete!`},
 						},
 					},
 				},

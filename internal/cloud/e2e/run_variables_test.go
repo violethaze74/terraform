@@ -116,7 +116,7 @@ func Test_cloud_run_variables(t *testing.T) {
 					if tfCmd.expectedCmdOutput != "" {
 						_, err := exp.ExpectString(tfCmd.expectedCmdOutput)
 						if err != nil {
-							t.Fatal(err)
+							t.Fatalf(`Expected command output "%s", but got %v `, tfCmd.expectedCmdOutput, err)
 						}
 					}
 
@@ -132,7 +132,7 @@ func Test_cloud_run_variables(t *testing.T) {
 								output := tfCmd.postInputOutput[i]
 								_, err := exp.ExpectString(output)
 								if err != nil {
-									t.Fatal(err)
+									t.Fatalf(`Expected command output "%s", but got %v `, tfCmd.expectedCmdOutput, err)
 								}
 							}
 						}

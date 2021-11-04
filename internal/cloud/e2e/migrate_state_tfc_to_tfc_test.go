@@ -55,10 +55,8 @@ func Test_migrate_tfc_to_tfc_single_workspace(t *testing.T) {
 							expectedCmdOutput: `prod`, // this comes from the `prep` function
 						},
 						{
-							command:           []string{"apply"},
-							expectedCmdOutput: `Do you want to perform these actions in workspace "prod"?`,
-							userInput:         []string{"yes"},
-							postInputOutput:   []string{`Apply complete!`},
+							command:         []string{"apply", "-auto-approve"},
+							postInputOutput: []string{`Apply complete!`},
 						},
 					},
 				},
@@ -119,10 +117,8 @@ func Test_migrate_tfc_to_tfc_single_workspace(t *testing.T) {
 							expectedCmdOutput: `Terraform Cloud has been successfully initialized!`,
 						},
 						{
-							command:           []string{"apply"},
-							expectedCmdOutput: `Do you want to perform these actions in workspace "prod"?`,
-							userInput:         []string{"yes"},
-							postInputOutput:   []string{`Apply complete!`},
+							command:         []string{"apply", "-auto-approve"},
+							postInputOutput: []string{`Apply complete!`},
 						},
 					},
 				},
@@ -183,10 +179,8 @@ func Test_migrate_tfc_to_tfc_single_workspace(t *testing.T) {
 							expectedCmdOutput: `Terraform Cloud has been successfully initialized!`,
 						},
 						{
-							command:           []string{"apply"},
-							expectedCmdOutput: `Do you want to perform these actions in workspace "prod"?`,
-							userInput:         []string{"yes"},
-							postInputOutput:   []string{`Apply complete!`},
+							command:         []string{"apply", "-auto-approve"},
+							postInputOutput: []string{`Apply complete!`},
 						},
 					},
 				},
