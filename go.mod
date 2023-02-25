@@ -95,7 +95,7 @@ require (
 	google.golang.org/protobuf v1.27.1
 	honnef.co/go/tools v0.3.0-0.dev
 	k8s.io/api v0.0.0-20190620084959-7cf5895f2711
-	k8s.io/apimachinery v0.0.0-20190913080033-27d36303b655
+	k8s.io/apimachinery v0.15.7
 	k8s.io/client-go v10.0.0+incompatible
 	k8s.io/utils v0.0.0-20200411171748-3d5a2fe318e4
 )
