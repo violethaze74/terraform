@@ -20,29 +20,29 @@ require (
 	github.com/bmatcuk/doublestar v1.1.5
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e
 	github.com/coreos/pkg v0.0.0-20180928190104-399ea9e2e55f
-	github.com/davecgh/go-spew v1.1.1
+	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc
 	github.com/dylanmei/winrmtest v0.0.0-20190225150635-99b7fe2fddf1
 	github.com/go-test/deep v1.0.3
 	github.com/golang/mock v1.6.0
 	github.com/golang/protobuf v1.5.2
-	github.com/google/go-cmp v0.5.5
+	github.com/google/go-cmp v0.5.9
 	github.com/google/uuid v1.2.0
 	github.com/gophercloud/gophercloud v0.10.1-0.20200424014253-c3bfe50899e5
 	github.com/gophercloud/utils v0.0.0-20200423144003-7c72efc7435d
 	github.com/hashicorp/aws-sdk-go-base v0.7.1
-	github.com/hashicorp/consul/api v1.9.1
-	github.com/hashicorp/consul/sdk v0.8.0
+	github.com/hashicorp/consul/api v1.25.1
+	github.com/hashicorp/consul/sdk v0.14.1
 	github.com/hashicorp/errwrap v1.1.0
 	github.com/hashicorp/go-azure-helpers v0.14.0
 	github.com/hashicorp/go-checkpoint v0.5.0
 	github.com/hashicorp/go-cleanhttp v0.5.2
 	github.com/hashicorp/go-getter v1.5.2
-	github.com/hashicorp/go-hclog v0.15.0
+	github.com/hashicorp/go-hclog v1.5.0
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/hashicorp/go-plugin v1.4.3
 	github.com/hashicorp/go-retryablehttp v0.7.0
 	github.com/hashicorp/go-tfe v0.19.1-0.20211020175229-e52963e079d0
-	github.com/hashicorp/go-uuid v1.0.2
+	github.com/hashicorp/go-uuid v1.0.3
 	github.com/hashicorp/go-version v1.2.1
 	github.com/hashicorp/hcl v0.0.0-20170504190234-a4b07c25de5f
 	github.com/hashicorp/hcl/v2 v2.10.1
@@ -54,7 +54,7 @@ require (
 	github.com/lib/pq v1.10.3
 	github.com/lusis/go-artifactory v0.0.0-20160115162124-7e4ce345df82
 	github.com/masterzen/winrm v0.0.0-20200615185753-c42b5136ff88
-	github.com/mattn/go-isatty v0.0.12
+	github.com/mattn/go-isatty v0.0.17
 	github.com/mattn/go-shellwords v1.0.4
 	github.com/mitchellh/cli v1.1.2
 	github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db
@@ -63,7 +63,7 @@ require (
 	github.com/mitchellh/go-linereader v0.0.0-20190213213312-1b945b3263eb
 	github.com/mitchellh/go-wordwrap v1.0.1
 	github.com/mitchellh/gox v1.0.1
-	github.com/mitchellh/mapstructure v1.1.2
+	github.com/mitchellh/mapstructure v1.5.0
 	github.com/mitchellh/reflectwalk v1.0.2
 	github.com/nishanths/exhaustive v0.2.3
 	github.com/packer-community/winrmcp v0.0.0-20180921211025-c76d91c1e7db
@@ -81,14 +81,15 @@ require (
 	github.com/zclconf/go-cty-debug v0.0.0-20191215020915-b22d67c1ba0b
 	github.com/zclconf/go-cty-yaml v1.0.2
 	go.etcd.io/etcd v0.5.0-alpha.5.0.20210428180535-15715dcf1ace
-	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97
-	golang.org/x/mod v0.4.2
-	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d
+	golang.org/x/crypto v0.11.0
+	golang.org/x/mod v0.8.0
+	golang.org/x/net v0.13.0
 	golang.org/x/oauth2 v0.0.0-20210313182246-cd4f82c27b84
-	golang.org/x/sys v0.0.0-20210809222454-d867a43fc93e
-	golang.org/x/term v0.0.0-20201210144234-2321bbc49cbf
-	golang.org/x/text v0.3.6
-	golang.org/x/tools v0.1.7
+	golang.org/x/sys v0.10.0
+	golang.org/x/term v0.10.0
+	golang.org/x/text v0.11.0
+	golang.org/x/tools v0.6.0
+	golang.org/x/tools/cmd/cover v0.1.0-deprecated
 	google.golang.org/api v0.44.0-impersonate-preview
 	google.golang.org/grpc v1.36.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0
@@ -121,7 +122,7 @@ require (
 	github.com/antchfx/xpath v0.0.0-20190129040759-c8489ed3251e // indirect
 	github.com/antchfx/xquery v0.0.0-20180515051857-ad5b8c7a47b0 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
-	github.com/armon/go-metrics v0.0.0-20180917152333-f0300d1749da // indirect
+	github.com/armon/go-metrics v0.4.1 // indirect
 	github.com/armon/go-radix v1.0.0 // indirect
 	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect
 	github.com/bgentry/go-netrc v0.0.0-20140422174119-9fd32a8b3d3d // indirect
@@ -129,7 +130,7 @@ require (
 	github.com/coreos/go-systemd v0.0.0-20181012123002-c6f51f82210d // indirect
 	github.com/dimchansky/utfbom v1.1.1 // indirect
 	github.com/dylanmei/iso8601 v0.1.0 // indirect
-	github.com/fatih/color v1.9.0 // indirect
+	github.com/fatih/color v1.14.1 // indirect
 	github.com/form3tech-oss/jwt-go v3.2.2+incompatible // indirect
 	github.com/gofrs/uuid v3.3.0+incompatible // indirect
 	github.com/gogo/protobuf v1.2.2-0.20190723190241-65acae22fc9d // indirect
@@ -139,24 +140,23 @@ require (
 	github.com/googleapis/gax-go/v2 v2.0.5 // indirect
 	github.com/googleapis/gnostic v0.0.0-20170729233727-0c5108395e2d // indirect
 	github.com/gopherjs/gopherjs v0.0.0-20181017120253-0766667cb4d1 // indirect
-	github.com/hashicorp/go-immutable-radix v1.0.0 // indirect
-	github.com/hashicorp/go-msgpack v0.5.4 // indirect
+	github.com/hashicorp/go-immutable-radix v1.3.1 // indirect
 	github.com/hashicorp/go-rootcerts v1.0.2 // indirect
 	github.com/hashicorp/go-safetemp v1.0.0 // indirect
 	github.com/hashicorp/go-slug v0.7.0 // indirect
-	github.com/hashicorp/golang-lru v0.5.1 // indirect
+	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/hashicorp/jsonapi v0.0.0-20210826224640-ee7dae0fb22d // indirect
-	github.com/hashicorp/serf v0.9.5 // indirect
+	github.com/hashicorp/serf v0.10.1 // indirect
 	github.com/hashicorp/yamux v0.0.0-20181012175058-2f1d1f20f75d // indirect
 	github.com/huandu/xstrings v1.3.2 // indirect
 	github.com/imdario/mergo v0.3.11 // indirect
-	github.com/json-iterator/go v1.1.7 // indirect
+	github.com/json-iterator/go v1.1.9 // indirect
 	github.com/jstemmer/go-junit-report v0.9.1 // indirect
 	github.com/jtolds/gls v4.2.1+incompatible // indirect
 	github.com/klauspost/compress v1.11.2 // indirect
 	github.com/kr/pty v1.1.1 // indirect
 	github.com/masterzen/simplexml v0.0.0-20190410153822-31eea3082786 // indirect
-	github.com/mattn/go-colorable v0.1.6 // indirect
+	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mitchellh/go-testing-interface v1.0.0 // indirect
 	github.com/mitchellh/iochan v1.0.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
@@ -175,9 +175,9 @@ require (
 	go.uber.org/atomic v1.3.2 // indirect
 	go.uber.org/multierr v1.1.0 // indirect
 	go.uber.org/zap v1.10.0 // indirect
+	golang.org/x/exp v0.0.0-20230321023759-10a507213a29 // indirect
 	golang.org/x/lint v0.0.0-20201208152925-83fdc39ff7b5 // indirect
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0 // indirect
-	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20210319143718-93e7006c17a6 // indirect
 	gopkg.in/inf.v0 v0.9.0 // indirect
